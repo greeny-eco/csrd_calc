@@ -1,0 +1,25 @@
+name: csrd_calc
+description: "CSRD Date Calculator"
+
+version: 1.0.0+1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  page_transition: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
