@@ -28,13 +28,14 @@ class ResultScreen extends StatelessWidget {
         ),
         _buildAdditionalText(),
         _buildDebugText(),
-        const SizedBox(height: 48),
+        const Spacer(),
+        const SizedBox(height: 16),
         ElevatedButton.icon(
           label: const Text("Ricomincia"),
           icon: const Icon(Icons.restart_alt),
           onPressed: () => AppStateController().gotoStart(context),
         ),
-        const Spacer(),
+        const SizedBox(height: 16),
         _buildPoweredByText(),
       ]),
     ));
