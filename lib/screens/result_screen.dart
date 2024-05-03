@@ -28,7 +28,7 @@ class ResultScreen extends StatelessWidget {
         const SizedBox(height: 48),
         ElevatedButton.icon(
           label: const Text("Ricomincia"),
-          icon: Icon(Icons.restart_alt),
+          icon: const Icon(Icons.restart_alt),
           onPressed: () => AppStateController().gotoStart(context),
         ),
       ]),

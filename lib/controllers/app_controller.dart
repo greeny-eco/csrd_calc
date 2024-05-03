@@ -169,7 +169,7 @@ class AppStateController {
       ));
     }
 
-    return ResultScreen(Result.invalidState());
+    // return ResultScreen(Result.invalidState());
   }
 
   gotoNextScreen(BuildContext context, {Widget? currentScreen}) {
