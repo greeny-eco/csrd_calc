@@ -1,8 +1,11 @@
 import 'package:csrd_calc/controllers/app_controller.dart';
 import 'package:csrd_calc/theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../data/result.dart';
+import '../globals.dart';
 import '../widgets/app_scaffold.dart';
 
 class ResultScreen extends StatelessWidget {
@@ -31,6 +34,8 @@ class ResultScreen extends StatelessWidget {
           icon: const Icon(Icons.restart_alt),
           onPressed: () => AppStateController().gotoStart(context),
         ),
+        const Spacer(),
+        _buildPoweredByText(),
       ]),
     ));
   }
@@ -100,4 +105,20 @@ class ResultScreen extends StatelessWidget {
             style: textTheme.bodySmall,
           ))
       : Container();
+
+  Widget _buildPoweredByText() => RichText(
+          text: TextSpan(children: [
+        TextSpan(
+          style: textTheme.bodySmall,
+          text: "Powered by ",
+        ),
+        TextSpan(
+          style: textTheme.bodySmall?.copyWith(
+            color: primaryColor,
+          ),
+          text: "greeny.eco",
+          recognizer: TapGestureRecognizer()
+            ..onTap = () => launchUrl(onlineVersionUrl),
+        ),
+      ]));
 }
