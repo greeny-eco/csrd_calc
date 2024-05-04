@@ -1,7 +1,7 @@
 name: csrd_calc
 description: "CSRD Date Calculator"
 
-version: 1.1.0+10100
+version: 1.1.1+10101
 publish_to: 'none'
 
 environment:
