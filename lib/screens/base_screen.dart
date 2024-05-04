@@ -1,10 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AppScaffold extends StatelessWidget {
-  final Widget child;
+abstract class BaseScreen extends StatefulWidget {
+  const BaseScreen({super.key});
+}
 
-  const AppScaffold({super.key, required this.child});
+abstract class BaseScreenState<W extends BaseScreen> extends State<W> {
+  late AppLocalizations S;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    S = AppLocalizations.of(context)!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +22,7 @@ class AppScaffold extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Stack(alignment: Alignment.topCenter, children: [
         _buildReloadIcon(),
-        Center(child: child),
+        Center(child: body(context)),
       ]),
     ));
   }
@@ -26,4 +35,6 @@ class AppScaffold extends StatelessWidget {
           '${kReleaseMode ? 'assets/' : ''}images/logo-greeny.png',
         ),
       ));
+
+  Widget body(BuildContext context);
 }

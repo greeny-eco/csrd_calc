@@ -1,11 +1,13 @@
 import 'package:csrd_calc/controllers/app_controller.dart';
+import 'package:csrd_calc/globals.dart';
+import 'package:csrd_calc/screens/base_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../data/question_answer.dart';
 import '../theme.dart';
-import '../widgets/app_scaffold.dart';
 
-class QuestionScreen extends StatefulWidget {
+class QuestionScreen extends BaseScreen {
   final Question question;
   final ValueSetter<Answer> setter;
 
@@ -15,20 +17,23 @@ class QuestionScreen extends StatefulWidget {
   State<QuestionScreen> createState() => _QuestionScreenState();
 }
 
-class _QuestionScreenState extends State<QuestionScreen> {
+class _QuestionScreenState extends BaseScreenState<QuestionScreen> {
   Answer? _answer;
 
   @override
-  Widget build(BuildContext context) {
-    return AppScaffold(
-        child: Column(children: [
+  Widget body(BuildContext context) {
+    return Column(children: [
       Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Expanded(
           child: Text(widget.question.text, style: textTheme.titleLarge),
         ),
         IconButton(
+          tooltip: S.restart,
           onPressed: () => AppStateController().gotoStart(context),
-          icon: const Icon(Icons.restart_alt),
+          icon: Icon(
+            Icons.restart_alt,
+            semanticLabel: AppLocalizations.of(context)!.restart,
+          ),
         )
       ]),
       const Divider(),
@@ -40,7 +45,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             _buildAnswer(widget.question.answers[index], widget.setter),
       )),
       _buildProgressIndicator(),
-    ]));
+    ]);
   }
 
   Widget _buildAnswer(Answer answer, ValueSetter<Answer> setter) =>
@@ -53,7 +58,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         onChanged: _answer == null
             ? (answer) {
                 setState(() => _answer = answer);
-                if (answer != null) widget.setter.call(answer);
+                answer?.let((a) => widget.setter.call(answer));
                 AppStateController()
                     .gotoNextScreen(context, currentScreen: widget);
               }
@@ -65,8 +70,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
     return Hero(
         tag: 'app-indicator',
         child: LinearProgressIndicator(
-          value: (state.answeredQuestions + 1).toDouble() /
-              (state.totalQuestions + 1).toDouble(),
+          value:
+              state.answeredQuestions / (state.totalQuestions + 1).toDouble(),
           backgroundColor: Colors.transparent,
           valueColor: const AlwaysStoppedAnimation<Color>(primaryColor),
         ));
