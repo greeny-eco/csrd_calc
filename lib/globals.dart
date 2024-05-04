@@ -7,6 +7,23 @@ final onlineVersionUrl = Uri.parse('https://calc.greeny.eco/');
 const supportedLocales = [
   Locale('it'),
   Locale('en'),
+  Locale('ar'),
+  Locale('cs'),
+  Locale('da'),
+  Locale('de'),
+  Locale('el'),
+  Locale('es'),
+  Locale('fi'),
+  Locale('fr'),
+  Locale('hu'),
+  Locale('ja'),
+  Locale('ko'),
+  Locale('nl'),
+  Locale('pl'),
+  Locale('pt'),
+  Locale('ro'),
+  Locale('ru'),
+  Locale('sv'),
 ];
 
 extension ObjectExt<T> on T {
