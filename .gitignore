@@ -49,3 +49,4 @@ lib/firebase_options.dart
 # Greeny
 deploy-web.sh
 web/version
+test/screenshots

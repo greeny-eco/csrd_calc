@@ -21,6 +21,7 @@ class _ResultScreenState extends BaseScreenState<ResultScreen> {
   @override
   Widget body(BuildContext context) {
     return Container(
+      key: ValueKey(widget.result),
       constraints: const BoxConstraints(maxWidth: 490),
       child: Column(children: [
         Row(
@@ -104,7 +105,7 @@ class _ResultScreenState extends BaseScreenState<ResultScreen> {
       ? Padding(
           padding: const EdgeInsets.only(top: 16),
           child: Text(
-            "Informazioni per il debug: ${AppStateController().currentState}",
+            "Debug info: ${AppStateController().currentState}",
             style: textTheme.bodySmall,
           ))
       : Container();
