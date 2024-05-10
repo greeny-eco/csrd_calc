@@ -25,7 +25,11 @@ class _QuestionScreenState extends BaseScreenState<QuestionScreen> {
     return Column(children: [
       Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Expanded(
-          child: Text(widget.question.text, style: textTheme.titleLarge),
+          child: Text(
+            key: const Key('question'),
+            widget.question.text,
+            style: textTheme.titleLarge,
+          ),
         ),
         IconButton(
           tooltip: S.restart,

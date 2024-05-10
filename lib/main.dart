@@ -1,21 +1,27 @@
 import 'package:csrd_calc/globals.dart';
 import 'package:csrd_calc/theme.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'data/firebase_provider.dart';
 import 'firebase_options.dart';
 import 'screens/welcome_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const CsrdCalcApp());
+
+  runApp(CsrdCalcApp(
+    firebaseProvider: FirebaseProvider(),
+  ));
 }
 
 class CsrdCalcApp extends StatefulWidget {
-  const CsrdCalcApp({super.key});
+  final FirebaseProvider firebaseProvider;
+
+  const CsrdCalcApp({required this.firebaseProvider, super.key});
 
   static CsrdCalcAppState of(BuildContext context) =>
       context.findAncestorStateOfType<CsrdCalcAppState>()!;
@@ -57,7 +63,7 @@ class CsrdCalcAppState extends State<CsrdCalcApp> {
       ],
       supportedLocales: supportedLocales,
       navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+        widget.firebaseProvider.firebaseAnalyticsObserver,
       ],
     );
   }

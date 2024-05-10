@@ -1,30 +1,43 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:csrd_calc/main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const CsrdCalcApp());
+import 'mock/mock_firebase_provider.dart';
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+void main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  // Use Mockito to mock FirebaseAnalytics.instance
+  final mockFirebaseProvider = MockFirebaseProvider();
+  // when(FirebaseProvider()).thenReturn(mockFirebaseProvider);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  final S = await AppLocalizations.delegate.load(const Locale('it'));
+
+  pumpAndWaitForPageTransition(WidgetTester tester) =>
+      tester.pumpAndSettle(const Duration(milliseconds: 300));
+
+  testWidgets('Not in EU', (WidgetTester tester) async {
+    // tester.view.physicalSize = const Size(500, 2000);
+    debugPrint("${tester.view.physicalSize}");
+
+    // Build our app and trigger a frame
+    await tester.pumpWidget(CsrdCalcApp(
+      firebaseProvider: mockFirebaseProvider,
+    ));
+
+    // Should show loading
+    expect(find.byType(LoadingIndicator), findsOneWidget);
+    await tester.pumpAndSettle(const Duration(milliseconds: 300));
+
+    // First question is
+    expect(find.text(S.isWithinEuQuestion), findsOneWidget);
+    await pumpAndWaitForPageTransition(tester);
+
+    // Tap "No"
+    // debugDumpApp();
+    await tester.tap(find.text(S.no));
+    await pumpAndWaitForPageTransition(tester);
   });
 }

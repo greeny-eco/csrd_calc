@@ -25,6 +25,7 @@ class _WelcomeScreenState extends BaseScreenState<WelcomeScreen> {
     return Container(
         constraints: const BoxConstraints(maxWidth: 150),
         child: const LoadingIndicator(
+          key: Key('loading'),
           indicatorType: Indicator.audioEqualizer,
           colors: palette,
         ));
