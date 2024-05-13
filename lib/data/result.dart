@@ -11,6 +11,17 @@ class Result {
   String toString() {
     return 'Result{type: $type, text: $text}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Result &&
+          runtimeType == other.runtimeType &&
+          type == other.type &&
+          sinceYear == other.sinceYear;
+
+  @override
+  int get hashCode => type.hashCode ^ sinceYear.hashCode;
 }
 
 enum ResultType {
