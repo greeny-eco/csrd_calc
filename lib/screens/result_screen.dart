@@ -1,6 +1,7 @@
 import 'package:csrd_calc/controllers/app_controller.dart';
 import 'package:csrd_calc/screens/base_screen.dart';
 import 'package:csrd_calc/theme.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,6 +19,19 @@ class ResultScreen extends BaseScreen {
 }
 
 class _ResultScreenState extends BaseScreenState<ResultScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseAnalytics.instance.logEvent(
+      name: "csrd_result",
+      parameters: {
+        'resultType': widget.result.type.name,
+        'resultYear': widget.result.sinceYear,
+      },
+    );
+  }
+
   @override
   Widget body(BuildContext context) {
     return Container(
