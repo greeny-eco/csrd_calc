@@ -1,5 +1,8 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
+
+import '../firebase_options.dart';
 
 class FirebaseWidget extends InheritedWidget {
   static FirebaseProvider of(BuildContext context) =>
@@ -20,10 +23,16 @@ class FirebaseWidget extends InheritedWidget {
 }
 
 class FirebaseProvider {
+  const FirebaseProvider();
+
+  init() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
   FirebaseAnalytics get analytics => FirebaseAnalytics.instance;
 
   FirebaseAnalyticsObserver get firebaseAnalyticsObserver =>
       FirebaseAnalyticsObserver(analytics: analytics);
-
-  const FirebaseProvider();
 }

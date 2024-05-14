@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:csrd_calc/controllers/app_controller.dart';
+import 'package:csrd_calc/data/firebase_provider.dart';
 import 'package:csrd_calc/data/result.dart';
 import 'package:csrd_calc/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,10 +61,12 @@ void main() async {
 extension WidgetTesterQuestionAnswer on WidgetTester {
   setUp(Locale locale) async {
     // Build our app and trigger a frame
+    final FirebaseProvider firebaseProvider = MockFirebaseProvider();
+    await firebaseProvider.init();
     await pumpWidget(CsrdCalcApp(
       key: ValueKey(Random().nextDouble()),
       defaultLocale: locale,
-      firebaseProvider: MockFirebaseProvider(),
+      firebaseProvider: firebaseProvider,
     ));
 
     // Reset app state
