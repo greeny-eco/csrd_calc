@@ -1,9 +1,9 @@
 import 'package:csrd_calc/screens/base_screen.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 import '../controllers/app_controller.dart';
+import '../data/firebase_provider.dart';
 import '../theme.dart';
 
 class WelcomeScreen extends BaseScreen {
@@ -18,10 +18,10 @@ class _WelcomeScreenState extends BaseScreenState<WelcomeScreen> {
   void initState() {
     super.initState();
 
-    FirebaseAnalytics.instance.logEvent(name: "csrdcalc_start");
-
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => AppStateController().gotoNextScreen(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FirebaseWidget.of(context).analytics.logEvent(name: "csrdcalc_start");
+      AppStateController().gotoNextScreen(context);
+    });
   }
 
   @override

@@ -11,7 +11,15 @@ class MockFirebaseProvider extends Mock implements FirebaseProvider {
       MockFirebaseAnalyticsObserver(analytics: analytics);
 }
 
-class MockFirebaseAnalytics extends Mock implements FirebaseAnalytics {}
+class MockFirebaseAnalytics extends Mock implements FirebaseAnalytics {
+  @override
+  Future<void> logEvent({
+    required String name,
+    Map<String, Object?>? parameters,
+    AnalyticsCallOptions? callOptions,
+  }) =>
+      Future.value();
+}
 
 class MockFirebaseAnalyticsObserver extends Mock
     implements FirebaseAnalyticsObserver {

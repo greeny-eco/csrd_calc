@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:csrd_calc/controllers/app_controller.dart';
 import 'package:csrd_calc/data/result.dart';
 import 'package:csrd_calc/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,12 +11,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 import 'mock/mock_firebase_provider.dart';
-import 'screenshots.dart';
 
 void main() async {
-  // Setup
   TestWidgetsFlutterBinding.ensureInitialized();
-  final S = await AppLocalizations.delegate.load(const Locale('it'));
+
+  // Setup language
+  const locale = Locale('en', 'US');
+  final S = await AppLocalizations.delegate.load(locale);
+
+  // Setup fonts
   FontLoader('Roboto')
     ..addFont(rootBundle.load('assets/fonts/Roboto-Regular.ttf'))
     ..load();
@@ -21,13 +27,13 @@ void main() async {
   testWidgets('Not in EU', (WidgetTester tester) async {
     // tester.view.physicalSize = const Size(500, 2000);
     // debugPrint("${tester.view.physicalSize}");
-    await tester.setUp();
+    await tester.setUp(locale);
     await tester.expectQuestionAndClickAnswer(
       question: S.isWithinEuQuestion,
       answer: S.no,
     );
     // debugDumpApp();
-    await tester.takeScreenshot(name: "result");
+    // await tester.takeScreenshot(name: "result");
     expect(
       find.byKey(ValueKey(Result(type: ResultType.futureDue, sinceYear: 2029))),
       findsOneWidget,
@@ -35,7 +41,7 @@ void main() async {
   });
 
   testWidgets('Not listed', (WidgetTester tester) async {
-    await tester.setUp();
+    await tester.setUp(locale);
     await tester.expectQuestionAndClickAnswer(
       question: S.isWithinEuQuestion,
       answer: S.yes,
@@ -52,11 +58,16 @@ void main() async {
 }
 
 extension WidgetTesterQuestionAnswer on WidgetTester {
-  setUp() async {
+  setUp(Locale locale) async {
     // Build our app and trigger a frame
     await pumpWidget(CsrdCalcApp(
+      key: ValueKey(Random().nextDouble()),
+      defaultLocale: locale,
       firebaseProvider: MockFirebaseProvider(),
     ));
+
+    // Reset app state
+    await AppStateController().gotoStart();
 
     // Should show loading
     expect(find.byType(LoadingIndicator), findsOneWidget);

@@ -1,3 +1,4 @@
+import 'package:csrd_calc/globals.dart';
 import 'package:csrd_calc/screens/result_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,9 +12,7 @@ import '../screens/question_screen.dart';
 class AppStateController {
   static final AppStateController _instance = AppStateController._internal();
 
-  factory AppStateController() {
-    return _instance;
-  }
+  factory AppStateController() => _instance;
 
   AppStateController._internal();
 
@@ -164,8 +163,8 @@ class AppStateController {
     );
   }
 
-  gotoStart(BuildContext context) {
+  gotoStart([BuildContext? context]) {
     _state = AppState();
-    gotoNextScreen(context);
+    context?.let((context) => gotoNextScreen(context));
   }
 }

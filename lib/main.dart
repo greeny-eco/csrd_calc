@@ -14,14 +14,20 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(CsrdCalcApp(
-    firebaseProvider: FirebaseProvider(),
+    defaultLocale: supportedLocales.first,
+    firebaseProvider: const FirebaseProvider(),
   ));
 }
 
 class CsrdCalcApp extends StatefulWidget {
   final FirebaseProvider firebaseProvider;
+  final Locale defaultLocale;
 
-  const CsrdCalcApp({required this.firebaseProvider, super.key});
+  const CsrdCalcApp({
+    required this.firebaseProvider,
+    required this.defaultLocale,
+    super.key,
+  });
 
   static CsrdCalcAppState of(BuildContext context) =>
       context.findAncestorStateOfType<CsrdCalcAppState>()!;
@@ -32,7 +38,7 @@ class CsrdCalcApp extends StatefulWidget {
 
 class CsrdCalcAppState extends State<CsrdCalcApp> {
   Locale get locale => _locale;
-  Locale _locale = supportedLocales.first;
+  late Locale _locale;
 
   /// To change language: CsrdCalcApp.of(context).locale = Locale(...);
   set locale(Locale newLocale) {
@@ -45,26 +51,30 @@ class CsrdCalcAppState extends State<CsrdCalcApp> {
   @override
   void initState() {
     super.initState();
+    _locale = widget.defaultLocale;
     Uri.base.queryParameters['lang']?.let((lang) => WidgetsBinding.instance
         .addPostFrameCallback((_) => locale = Locale(lang)));
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: theme,
-      locale: _locale,
-      home: const WelcomeScreen(),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: supportedLocales,
-      navigatorObservers: [
-        widget.firebaseProvider.firebaseAnalyticsObserver,
-      ],
+    return FirebaseWidget(
+      provider: widget.firebaseProvider,
+      child: MaterialApp(
+        theme: theme,
+        locale: _locale,
+        home: const WelcomeScreen(),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: supportedLocales,
+        navigatorObservers: [
+          widget.firebaseProvider.firebaseAnalyticsObserver,
+        ],
+      ),
     );
   }
 }
